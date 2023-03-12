@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,25 +13,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import database.ClassCurriculumDatabase;
-import database.ClassesDatabase;
-import database.SubjectsDatabase;
+import database.TeacherScheduleDatabase;
+import database.TeachersDatabase;
 import entity.ClassCurriculum;
-import entity.Classes;
-import entity.Subjects;
-
+import entity.TeacherSchedule;
+import entity.Teachers;
 
 /**
- * Servlet implementation class ClassCurrServlet
+ * Servlet implementation class TeachersSchedule
  */
-@WebServlet("/classcurr")
-public class ClassCurrServlet extends HttpServlet {
+@WebServlet("/teachersschedule")
+public class TeachersSchedule extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ClassCurrServlet() {
-    	System.out.println("Class Curriculum Servlet");
+    public TeachersSchedule() {
+    	System.out.println("Teacher's Schedule Servlet");
         // TODO Auto-generated constructor stub
     }
 
@@ -41,46 +41,46 @@ public class ClassCurrServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
 		response.setHeader("Pragma", "no-cache");//http1.0
-		response.setHeader("Pragma", "0");//proxies
+		response.setHeader("Pragma", "0");//p
 		
-		System.out.println(getServletContext().getContextPath() );
-		
-		ClassCurriculumDatabase db = new ClassCurriculumDatabase();
+		TeacherScheduleDatabase tdb = new TeacherScheduleDatabase();
 		try {
-			List<ClassCurriculum> clascur = db.getAllSubjectsforClasses();
-			RequestDispatcher dispatcher = request.getRequestDispatcher("classcurr.jsp");
-			request.setAttribute("clascur", clascur);
+			List<TeacherSchedule> teachsched = tdb.getTeachersSchedule();
+			RequestDispatcher dispatcher = request.getRequestDispatcher("teachersschedule.jsp");
+			request.setAttribute("teachsched", teachsched);
 			dispatcher.forward(request, response);
 				
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			RequestDispatcher dispatcher = request.getRequestDispatcher("classcurr.jsp");
+			e.printStackTrace();
+			RequestDispatcher dispatcher = request.getRequestDispatcher("teachersschedule.jsp");
 			request.setAttribute("error", "Something went wrong..Please try after sometime");
 			dispatcher.forward(request, response);
-			e.printStackTrace();
 		}
 	}
 
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
-	{
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
 		response.setHeader("Pragma", "no-cache");//http1.0
-		response.setHeader("Pragma", "0");//proxies
+		response.setHeader("Pragma", "0");//p
 		
-		ClassesDatabase cdb = new ClassesDatabase();
-		SubjectsDatabase sdb = new SubjectsDatabase();
+		TeachersDatabase tdb = new TeachersDatabase();
+		ClassCurriculumDatabase ccdb= new ClassCurriculumDatabase();
 		try {
-			List<Classes> classes = cdb.getAllClasses();
-			List<Subjects> subjects = sdb.getAllSubjects();
-			RequestDispatcher dispatcher = request.getRequestDispatcher("newcurr.jsp");
-			request.setAttribute("classes", classes);
-			request.setAttribute("subjects", subjects);
+			List<Teachers> teachers = tdb.getAllTeachers();
+			List<ClassCurriculum> classcurr = ccdb.getAllSubjectsforClasses();
+			RequestDispatcher dispatcher = request.getRequestDispatcher("newschedule.jsp");
+			request.setAttribute("teachers", teachers);
+			request.setAttribute("classcurr", classcurr);
 			dispatcher.forward(request, response);				
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			RequestDispatcher dispatcher = request.getRequestDispatcher("newcurr.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("newschedule.jsp");
 			request.setAttribute("error", "Something went wrong..Please try after sometime");
 			dispatcher.forward(request, response);
 		}

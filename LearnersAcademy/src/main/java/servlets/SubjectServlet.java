@@ -34,6 +34,9 @@ public class SubjectServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
+		response.setHeader("Pragma", "no-cache");//http1.0
+		response.setHeader("Pragma", "0");//p	
 		System.out.println(getServletContext().getContextPath() );
 		
 		SubjectsDatabase db = new SubjectsDatabase();
@@ -46,6 +49,15 @@ public class SubjectServlet extends HttpServlet {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			RequestDispatcher dispatcher = request.getRequestDispatcher("subjects.jsp");
+			request.setAttribute("error", "Something went wrong..Please try after sometime");
+			dispatcher.forward(request, response);
+			
 		}
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
+		doGet(request, response);
 	}
 }

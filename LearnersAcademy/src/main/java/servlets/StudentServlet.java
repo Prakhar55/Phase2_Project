@@ -11,22 +11,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import database.TeachersDatabase;
-import entity.Teachers;
-
+import database.StudentsDatabase;
+import entity.Students;
 
 /**
- * Servlet implementation class TeacherServlet
+ * Servlet implementation class StudentServlet
  */
-@WebServlet("/teachers")
-public class TeacherServlet extends HttpServlet {
+@WebServlet("/students")
+public class StudentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public TeacherServlet() {
-    	System.out.println("Teacher Servlet");
+    public StudentServlet() {
+    	System.out.println("Student Servlet");
         // TODO Auto-generated constructor stub
     }
 
@@ -34,33 +33,30 @@ public class TeacherServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		// TODO Auto-generated method stub
 		response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
 		response.setHeader("Pragma", "no-cache");//http1.0
 		response.setHeader("Pragma", "0");//p	
 		System.out.println(getServletContext().getContextPath() );
 		
-		TeachersDatabase db = new TeachersDatabase();
+		StudentsDatabase db = new StudentsDatabase();
 		try {
-			List<Teachers> teachers = db.getAllTeachers();
-			RequestDispatcher dispatcher = request.getRequestDispatcher("teachers.jsp");
-			request.setAttribute("teachers", teachers);
+			List<Students> students = db.getAllStudents();
+			RequestDispatcher dispatcher = request.getRequestDispatcher("students.jsp");
+			request.setAttribute("students", students);
 			dispatcher.forward(request, response);
 				
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			RequestDispatcher dispatcher = request.getRequestDispatcher("teachers.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("students.jsp");
 			request.setAttribute("error", "Something went wrong..Please try after sometime");
 			dispatcher.forward(request, response);
-			
 		}
-
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
 		doGet(request, response);
 	}
-
 }

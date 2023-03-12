@@ -28,12 +28,15 @@ public class AdminServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
+		response.setHeader("Pragma", "no-cache");//http1.0
+		response.setHeader("Pragma", "0");//proxies
 		RequestDispatcher dispatcher = request.getRequestDispatcher("admin.jsp");
-		dispatcher.forward(request, response);
+		dispatcher.forward(request, response);		
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
+		doGet(request, response);
+	}
 }

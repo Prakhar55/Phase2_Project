@@ -12,9 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import database.ClassesDatabase;
-import database.TeachersDatabase;
 import entity.Classes;
-import entity.Teachers;
 
 /**
  * Servlet implementation class ClassesServlet
@@ -35,8 +33,10 @@ public class ClassesServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		System.out.println(getServletContext().getContextPath() );
+		
+		response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
+		response.setHeader("Pragma", "no-cache");//http1.0
+		response.setHeader("Pragma", "0");//proxies
 		
 		ClassesDatabase db = new ClassesDatabase();
 		try {
@@ -48,8 +48,16 @@ public class ClassesServlet extends HttpServlet {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			RequestDispatcher dispatcher = request.getRequestDispatcher("classes.jsp");
+			request.setAttribute("error", "Something went wrong..Please try after sometime");
+			dispatcher.forward(request, response);
 		}
 
+	}
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
+		doGet(request, response);
 	}
 }
 

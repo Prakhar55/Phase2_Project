@@ -6,19 +6,11 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
     </head>
     <body>
-
-        <%--<spring:url value="/logout" var="url_logout"/>--%>
-
         <div class="container">
-            <!--nav bar-->
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <a class="navbar-brand" href="index.jsp">
                 	<img src="images/LearnersAcademy_logo.jpg" width="200" height="200" alt="">
                 </a>
-             
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    				<span class="navbar-toggler-icon"></span>
-  				</button>
 			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 			    <ul class="navbar-nav mr-auto">
 			    	<%
@@ -33,6 +25,9 @@
 					if (id != null) {
 					%>
 				  <li class="nav-item active">
+			        <a class="nav-link" href="admin.jsp">Admin Page</a>
+			      </li>
+				  <li class="nav-item active">
 			        <a class="nav-link" href="logout.jsp">Logout</a>
 			      </li>
 			      <%
@@ -41,7 +36,6 @@
 			    </ul>
 			  </div>
             </nav>
-            <!--jambutan-->
             <div class="jumbotron jumbotron-fluid">
                 <div class="container">             
                     <h1 style="text-align:center" class="mr-sm-2"  class="text-primary">Welcome to Learner's Academy</h1>
@@ -49,7 +43,5 @@
                  </div>
             </div>
         </div>
-        <script>
-        </script>
     </body>
 </html>

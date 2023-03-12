@@ -4,19 +4,15 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<title>Learners Academy - Class Curriculum</title>
+	<title>Learners Academy - Teachers</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
 </head>
 <body>
 	<div class="container">
-            <!--nav bar-->
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <a class="navbar-brand" href="index.jsp">
                 	<img src="images/LearnersAcademy_logo.jpg" width="200" height="200" alt="">
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    				<span class="navbar-toggler-icon"></span>
-  				</button>
 			  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 			    <ul class="navbar-nav mr-auto">
 			    	<%
@@ -26,7 +22,7 @@
                 	<li class="nav-item active">
 			        	<a class="nav-link" href="logout.jsp">Logout</a>
 			      	</li>
-			      <%
+			        <%
 					}
 					%>
 				 </ul>
@@ -38,11 +34,12 @@
 	<div class="row">
 		<div class="col-2 col-md-2">
 			<div class="list-group">
-		    	<a href="subjects" class="list-group-item list-group-item-action">Subjects</a>
-		    	<a href="classcurr" class="list-group-item list-group-item-action">Class Curriculum</a>
+				<a href="subjects" class="list-group-item list-group-item-action">Subjects</a>
 		    	<a href="classes" class="list-group-item list-group-item-action">Classes</a>
-		    	<a href="notice_board.htm" class="list-group-item list-group-item-action">Students</a>
-		    	<a href="all_teachers" class="list-group-item list-group-item-action ">Class Report</a>
+		    	<a href="classcurr" class="list-group-item list-group-item-action">Class Curriculum</a>
+		    	<a href="teachersschedule" class="list-group-item list-group-item-action">Teacher Schedule</a>
+		    	<a href="students" class="list-group-item list-group-item-action">Students</a>
+		    	<a href="classreport" class="list-group-item list-group-item-action ">Class Report</a>
 	    	</div>
 	    </div>	
 	    	
@@ -56,12 +53,12 @@
 									<input type="text" id="teach_name" class="fadeIn second" name="teach_name" placeholder="Teacher's Name"/>
 									<input type="submit" class="fadeIn fourth" value="Add" />
 								</form>
-								<%
-									String error = request.getParameter("error");
-								if(error !=  null){
-								%>
-								<div class="error"><%= error %></div>
-								<%} %>
+								<br/><br/>
+								<c:set var = "error" value = "${requestScope.error}"/>
+								<c:if test="${error != null}">
+								<br/><br/>
+								<h6 style="text-align:center;color:Red;">${error}</h6>
+								</c:if>
 							</div>
 						</div>
 					</div>

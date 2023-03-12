@@ -1,8 +1,8 @@
 package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,6 +29,9 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
+		response.setHeader("Pragma", "no-cache");//http1.0
+		response.setHeader("Pragma", "0");//p
 		response.sendRedirect("login.jsp");
 	}
 
@@ -43,7 +46,6 @@ public class LoginServlet extends HttpServlet {
 		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
-		PrintWriter out = response.getWriter();
 		response.setContentType("text/html");
 		
 		if(username!=null && username.equals("admin") 
@@ -52,10 +54,11 @@ public class LoginServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("id", username);
 			response.sendRedirect("admin");
-			return;
 		}
 		else {
-			response.sendRedirect("login.jsp?error=Invalid Credentials");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
+			request.setAttribute("error", "Invalid Credentials");
+			dispatcher.forward(request, response);
 		}
 	}
 

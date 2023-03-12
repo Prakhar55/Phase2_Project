@@ -1,9 +1,7 @@
 package servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,11 +10,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import database.ClassCurriculumDatabase;
 import database.ClassesDatabase;
 import database.SubjectsDatabase;
+import database.TeacherScheduleDatabase;
 import database.TeachersDatabase;
+import entity.ClassCurriculum;
 import entity.Classes;
 import entity.Subjects;
+import entity.TeacherSchedule;
 import entity.Teachers;
 
 /**
@@ -38,6 +40,10 @@ public class AddNewDataServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
+		response.setHeader("Pragma", "no-cache");//http1.0
+		response.setHeader("Pragma", "0");//proxies
+		response.sendRedirect("logout.jsp");
 	}
 
 	/**
@@ -45,6 +51,10 @@ public class AddNewDataServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+				
+				response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");
+				response.setHeader("Pragma", "no-cache");//http1.0
+				response.setHeader("Pragma", "0");//proxies	
 				
 				String sub_name =request.getParameter("sub_name");
 				
@@ -59,10 +69,17 @@ public class AddNewDataServlet extends HttpServlet {
 							response.sendRedirect("subjects");
 						}
 						else
-							response.sendRedirect("subjects");
+							{
+								RequestDispatcher dispatcher = request.getRequestDispatcher("subjects");
+								request.setAttribute("error", "Please recheck the values - inocrrect/duplicate");
+								dispatcher.forward(request, response);
+							}
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						RequestDispatcher dispatcher = request.getRequestDispatcher("subjects");
+						request.setAttribute("error", "Something went wrong...Please try after sometime");
+						dispatcher.forward(request, response);
 					}
 					
 				}
@@ -80,10 +97,17 @@ public class AddNewDataServlet extends HttpServlet {
 							response.sendRedirect("teachers");
 						}
 						else
-							response.sendRedirect("teachers");
+						{
+							RequestDispatcher dispatcher = request.getRequestDispatcher("teachers");
+							request.setAttribute("error", "Please recheck the values - inocrrect/duplicate");
+							dispatcher.forward(request, response);
+						}
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						RequestDispatcher dispatcher = request.getRequestDispatcher("teachers");
+						request.setAttribute("error", "Something went wrong...Please try after sometime");
+						dispatcher.forward(request, response);
 					}
 					
 				}
@@ -101,14 +125,83 @@ public class AddNewDataServlet extends HttpServlet {
 							response.sendRedirect("classes");
 						}
 						else
-							response.sendRedirect("classes");
+							{
+								RequestDispatcher dispatcher = request.getRequestDispatcher("classes");
+								request.setAttribute("error", "Please recheck the values - inocrrect/duplicate");
+								dispatcher.forward(request, response);
+							}
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+						RequestDispatcher dispatcher = request.getRequestDispatcher("classes");
+						request.setAttribute("error", "Something went wrong...Please try after sometime");
+						dispatcher.forward(request, response);
 					}
 					
 				}
 				
+				String selected_class = request.getParameter("selected_class");
+				String[] selected_sub = request.getParameterValues("selected_sub");
+				
+				if(selected_class != null && selected_sub != null)
+				{
+					ClassCurriculumDatabase db = new ClassCurriculumDatabase();
+					ClassCurriculum class_curr = new ClassCurriculum();
+					class_curr.setClass_name(selected_class);
+					String subjects = String.join(",", selected_sub);
+					System.out.println(subjects);
+					class_curr.setSubjects(subjects);
+					try {
+						if(db.addNewCurriculum(class_curr))
+						{
+							response.sendRedirect("classcurr");
+						}
+						else
+							{
+								RequestDispatcher dispatcher = request.getRequestDispatcher("classcurr");
+								request.setAttribute("error", "Please recheck the values - inocrrect/duplicate");
+								dispatcher.forward(request, response);
+							}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						RequestDispatcher dispatcher = request.getRequestDispatcher("classcurr");
+						request.setAttribute("error", "Something went wrong...Please try after sometime");
+						dispatcher.forward(request, response);
+					}
+					
+				}
+				
+				String schedule_teach = request.getParameter("schedule_teach");
+				String schedule_classcurr = request.getParameter("schedule_classcurr");
+				
+				
+				if(schedule_teach != null && schedule_classcurr != null )
+				{
+					String classcurr[]=schedule_classcurr.split(",");
+					TeacherScheduleDatabase tdb = new TeacherScheduleDatabase();
+					TeacherSchedule teach_sched = new TeacherSchedule();
+					teach_sched.setTeach_name(schedule_teach);
+					teach_sched.setClass_name(classcurr[0]);
+					teach_sched.setSub_name(classcurr[1]);
+					try {
+						if(tdb.addNewSchedule(teach_sched))
+						{
+							response.sendRedirect("teachersschedule");
+						}
+						else
+							{
+								RequestDispatcher dispatcher = request.getRequestDispatcher("teachersschedule");
+								request.setAttribute("error", "Please recheck the values - inocrrect/duplicate");
+								dispatcher.forward(request, response);
+							}
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+						RequestDispatcher dispatcher = request.getRequestDispatcher("teachersschedule");
+						request.setAttribute("error", "Something went wrong...Please try after sometime");
+						dispatcher.forward(request, response);
+					}
+				}				
+				}
 	}
-
-}
